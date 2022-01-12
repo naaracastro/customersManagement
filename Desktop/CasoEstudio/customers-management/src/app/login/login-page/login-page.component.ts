@@ -38,9 +38,11 @@ export class LoginPageComponent {
 
   authenticate() {
     /*Llamada al servicio*/
+    //var hash = md5('value')
     console.log('Llamada al servicio - '  + "User: " + this.user + "  Password:  " + this.pwd);
     this.loginService.authenticate(this.user,this.pwd);
   }
+
 
 
 }
