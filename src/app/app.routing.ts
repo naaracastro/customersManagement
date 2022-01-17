@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 const appRoutes: Routes = [
 
   { path: 'login', component: LoginPageComponent },
-  { path: 'pruebaNav', component: PruebasNavComponent },
+  //{ path: 'pruebaNav', component: PruebasNavComponent },
 
   { path: '', redirectTo: '/home', pathMatch: 'full' },
  { path: '**', redirectTo: '/home'}
