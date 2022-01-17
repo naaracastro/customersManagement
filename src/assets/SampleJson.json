@@ -1,0 +1,9 @@
+{
+  "codigo": "200",
+  "mensaje": "Ha ingresado correctamente",
+  "data": {
+    "access": true,
+    "typeRol": 1,
+    "message": "Crecenciales correctas"
+  }
+}
