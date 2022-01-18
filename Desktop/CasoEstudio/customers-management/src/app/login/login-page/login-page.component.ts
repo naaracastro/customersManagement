@@ -1,6 +1,8 @@
 import { LoginService } from './../services/login.service';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
+/*Llamada al servicio*/
+
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
