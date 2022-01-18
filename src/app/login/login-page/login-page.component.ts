@@ -1,5 +1,8 @@
+import { Data, LoginResponse } from './../interface/login.interface';
 import { LoginService } from './../services/login.service';
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -8,6 +11,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent {
+  public loginResponse: LoginResponse = <LoginResponse>{};
+  public listarTablaUsuario: Data = <Data>{};
+  dataSubscription: Subscription = new Subscription();
+
+  dataArreglo: any;
   public loginForm: {
     user: {
       val: string;
@@ -22,7 +30,7 @@ export class LoginPageComponent {
     };
   };
 
-  constructor() {
+  constructor(private loginService: LoginService, private router: Router) {
     this.loginForm = {
       user: {
         val: '',
@@ -54,36 +62,29 @@ export class LoginPageComponent {
         },
       },
     };
-
-    //private loginService : LoginService
   }
 
-   btnLogin() {
-   /*   this.user = this.txtUser.nativeElement.value;
-    this.pwd = this.txtPwd.nativeElement.value;
-     this.validate(); */
-   }
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
+  }
 
-  // validate() {
+  btnLogin() {
+    this.loginService.getJSON();
+    this.dataSubscription = this.loginService.getJSON().subscribe((res) => {
+      if (this.loginResponse == undefined) {
+        console.log('Objeto Vacio');
+      } else {
+        this.loginResponse = res;
+        console.log(this.loginResponse);
+      }
 
-  //   if (this.user == "" && this.pwd == "") {
-  //     /*Mostrar en pantalla*/
-  //     console.log('Datos en blanco');
-  //   } else if (this.user == "") {
-  //     console.log('User Required');
-  //   } else if (this.pwd == "") {
-  //     console.log('Password Required');
-  //   }else{
-  //     this.authenticate();
-  //   }
-  // }
 
-  // authenticate() {
-  //   /*Llamada al servicio*/
-  //   //var hash = md5('value')
-  //   console.log('Llamada al servicio - '  + "User: " + this.user + "  Password:  " + this.pwd);
-  //   this.loginService.authenticate(this.user,this.pwd);
-  // }
+    });
+  }
+
+  navegarAFormulario() {
+    this.router.navigateByUrl('pruebaNav');
+  }
 
   get isValidForm() {
     return this.loginForm.user.isValid() && this.loginForm.password.isValid();
