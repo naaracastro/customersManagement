@@ -1,7 +1,8 @@
+import { Data, LoginResponse } from './../interface/login.interface';
 import { LoginService } from './../services/login.service';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-
-/*Llamada al servicio*/
+import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -9,42 +10,82 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent {
-  @ViewChild('txtUser') txtUser!: ElementRef<HTMLInputElement>
-  @ViewChild('txtPwd') txtPwd!: ElementRef<HTMLInputElement>
-  user: any;
-  pwd:any;
+  public loginResponse: LoginResponse = <LoginResponse>{};
+  public listarTablaUsuario: Data = <Data>{};
+  dataSubscription: Subscription = new Subscription();
 
-  constructor(
-    private loginService : LoginService,
-  ) {}
+  dataArreglo: any;
+  public loginForm: {
+    user: {
+      val: string;
+      error: string;
+      isValid: () => boolean;
+    };
+
+    password: {
+      val: string;
+      error: string;
+      isValid: () => boolean;
+    };
+  };
+
+  constructor(private loginService: LoginService, private router: Router) {
+    this.loginForm = {
+      user: {
+        val: '',
+        error: 'Requerido User',
+        isValid() {
+          var valid = true;
+
+          if (this.val === '') {
+            this.error = 'Requerido User';
+            valid = false;
+          }
+
+          return valid;
+        },
+      },
+
+      password: {
+        val: '',
+        error: 'Requerido Pass',
+        isValid() {
+          var valid = true;
+
+          if (this.val === '') {
+            this.error = 'Requerido Pass';
+            valid = false;
+          }
+
+          return valid;
+        },
+      },
+    };
+  }
+
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
+  }
 
   btnLogin() {
-    this.user = this.txtUser.nativeElement.value;
-    this.pwd = this.txtPwd.nativeElement.value;
-    this.validate();
+    this.loginService.getJSON();
+    this.dataSubscription = this.loginService.getJSON().subscribe((res) => {
+      if (this.loginResponse == undefined) {
+        console.log('Objeto Vacio');
+      } else {
+        this.loginResponse = res;
+        console.log(this.loginResponse);
+      }
+
+
+    });
   }
 
-  validate() {
-
-    if (this.user == "" && this.pwd == "") {
-      /*Mostrar en pantalla*/
-      console.log('Datos en blanco');
-    } else if (this.user == "") {
-      console.log('User Required');
-    } else if (this.pwd == "") {
-      console.log('Password Required');
-    }else{
-      this.authenticate();
-    }
+  navegarAFormulario() {
+    this.router.navigateByUrl('pruebaNav');
   }
 
-  authenticate() {
-    /*Llamada al servicio*/
-    //var hash = md5('value')
-    console.log('Llamada al servicio - '  + "User: " + this.user + "  Password:  " + this.pwd);
-    this.loginService.authenticate(this.user,this.pwd);
+  get isValidForm() {
+    return this.loginForm.user.isValid() && this.loginForm.password.isValid();
   }
-
-
-
 }
