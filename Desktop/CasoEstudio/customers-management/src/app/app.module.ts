@@ -9,9 +9,13 @@ import { RouterModule } from '@angular/router';
 import { Routes } from '@angular/router';
 import { HeaderComponent } from './header/header/header.component';
 import { FooterComponent } from './footer/footer/footer.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { HomepageComponent } from './homepage/homepage.component';
+
 const appRoutes: Routes = [
    { path: 'login', component: LoginPageComponent },
-   //{ path: 'pruebaNav', component: PruebasNavComponent },
+   { path: 'homepage', component: HomepageComponent },
    { path: '', redirectTo: '/login', pathMatch: 'full' },
    { path: '**', redirectTo: '/login'}
  ];
@@ -21,14 +25,15 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     LoginPageComponent,
-    HeaderComponent, FooterComponent
+    HeaderComponent, FooterComponent, HomepageComponent
   ],
   imports: [
     FormsModule,
     BrowserModule,
     HttpClientModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(), // ToastrModule added
     RouterModule.forRoot(appRoutes)],
-
   providers: [],
   bootstrap: [AppComponent]
 })
