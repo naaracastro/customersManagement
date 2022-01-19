@@ -2,7 +2,8 @@ import { Data, LoginResponse } from './../interface/login.interface';
 import { LoginService } from './../services/login.service';
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-page',
@@ -29,16 +30,20 @@ export class LoginPageComponent {
     };
   };
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
     this.loginForm = {
       user: {
         val: '',
-        error: 'Requerido User',
+        error: 'User required',
         isValid() {
           var valid = true;
 
           if (this.val === '') {
-            this.error = 'Requerido User';
+            this.error = 'User required';
             valid = false;
           }
 
@@ -48,12 +53,13 @@ export class LoginPageComponent {
 
       password: {
         val: '',
-        error: 'Requerido Pass',
+        error: 'User required',
         isValid() {
           var valid = true;
 
           if (this.val === '') {
-            this.error = 'Requerido Pass';
+            this.error = 'Password required';
+
             valid = false;
           }
 
@@ -68,21 +74,48 @@ export class LoginPageComponent {
   }
 
   btnLogin() {
-    this.loginService.getJSON();
-    this.dataSubscription = this.loginService.getJSON().subscribe((res) => {
-      if (this.loginResponse == undefined) {
-        console.log('Objeto Vacio');
-      } else {
-        this.loginResponse = res;
-        console.log(this.loginResponse);
-      }
+    if (this.loginForm.user.val == '') {
+      this.toastr.success('User required');
+    }
+    if (this.loginForm.password.val == '') {
+      this.toastr.success('Password required');
+    }
 
+    this.getCredenciales();
+  }
+  getCredenciales() {
+    this.dataSubscription = this.loginService
+      .getJSON(this.loginForm.user.val, this.loginForm.password.val)
+      .subscribe((res) => {
+        if (this.loginResponse == undefined) {
+          console.log('Objeto Vacio');
+        } else {
+          this.loginResponse = res;
+          this.validar();
+        }
+      });
+  }
 
-    });
+  validar() {
+    if (this.loginResponse.data.access == false) {
+      this.toastr.error(this.loginResponse.data.message);
+      this.loginForm.user.val = '';
+      this.loginForm.password.val = '';
+    } else {
+      this.navegarAFormulario();
+      this.toastr.success(this.loginResponse.data.message);
+    }
   }
 
   navegarAFormulario() {
-    this.router.navigateByUrl('pruebaNav');
+   // console.log(this.navigationExtras)
+  //  this.router.navigateByUrl('homepage', this.navigationExtras);
+
+  this.router.navigate(
+    ['homepage'],
+    { queryParams: { id: 'popular' } }
+  );
+
   }
 
   get isValidForm() {

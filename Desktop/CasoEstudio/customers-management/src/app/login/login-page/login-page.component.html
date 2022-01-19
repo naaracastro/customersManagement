@@ -19,10 +19,13 @@
                   #user="ngModel"
                 />
                 <small
-                  class="bg-danger text-light mt-1 px-2 py-1 rounded"
+                  class="text-light mt-1 px-2 py-1 rounded"
                   *ngIf="!loginForm.user.isValid() && user.touched"
                   >{{ loginForm.user.error }}</small
                 >
+                <p >
+
+                </p>
                 <label class="form-label" for="typePasswordX">Password</label>
                 <input
                   class="form-control form-control-lg"
@@ -33,7 +36,7 @@
                   #password="ngModel"
                 />
                 <small
-                  class="bg-danger text-light mt-1 px-2 py-1 rounded"
+                  class="text-light mt-1 px-2 py-1 rounded"
                   *ngIf="!loginForm.password.isValid() && password.touched"
                   >{{ loginForm.password.error }}</small
                 >
@@ -45,6 +48,7 @@
                   class="btn btn-outline-light btn-lg px-5"
                   [disabled]="!isValidForm"
                   (click)="btnLogin()"
+
                 >
                   Login
                 </button>
