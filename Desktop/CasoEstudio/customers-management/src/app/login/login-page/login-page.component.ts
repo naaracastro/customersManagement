@@ -2,7 +2,7 @@ import { Data, LoginResponse } from './../interface/login.interface';
 import { LoginService } from './../services/login.service';
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -108,14 +108,9 @@ export class LoginPageComponent {
   }
 
   navegarAFormulario() {
-   // console.log(this.navigationExtras)
-  //  this.router.navigateByUrl('homepage', this.navigationExtras);
-
   this.router.navigate(
-    ['homepage'],
-    { queryParams: { id: 'popular' } }
+    ['/homepage/',{id: this.loginResponse.data.name +" "+  this.loginResponse.data.lastname}]
   );
-
   }
 
   get isValidForm() {

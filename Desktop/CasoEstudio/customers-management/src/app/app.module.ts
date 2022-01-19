@@ -14,11 +14,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { HomepageComponent } from './homepage/homepage.component';
 
 const appRoutes: Routes = [
-   { path: 'login', component: LoginPageComponent },
-   { path: 'homepage', component: HomepageComponent },
-   { path: '', redirectTo: '/login', pathMatch: 'full' },
-   { path: '**', redirectTo: '/login'}
- ];
+  { path: 'login', component: LoginPageComponent },
+  { path: 'homepage', component: HomepageComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login'}
+];
 
 
 @NgModule({
